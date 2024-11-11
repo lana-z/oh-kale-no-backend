@@ -1,0 +1,38 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+*.log
+.env
+
+# macOS
+.DS_Store
+
+# Node.js
+node_modules/
+*.log
+.cache
+yarn-debug.log*
+yarn-error.log*
+
+# Vite
+dist/
+
+
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+
