@@ -5,14 +5,13 @@ from urllib.parse import urlparse
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ohkaleno.netlify.app']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -22,13 +21,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'corsheaders',
+    
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware', 
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -53,7 +55,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ohkaleno_project.wsgi.application'
-
+DJANGO_SETTINGS_MODULE = 'ohkaleno_project.settings'
 
 # Neon db
 tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
@@ -111,3 +113,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref//#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CORS_ALLOWED_ORIGINS = [
+    'https://ohkaleno.netlify.app',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://ohkaleno.netlify.app',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
+CSRF_USE_SESSIONS = False
