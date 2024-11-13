@@ -118,15 +118,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ALLOWED_ORIGINS = [
-    'https://ohkaleno.netlify.app',
+    'https://ohkaleno.netlify.app',  
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://ohkaleno.netlify.app',
+    'https://ohkaleno.netlify.app', 
+    'https://oh-kale-no-backend.onrender.com',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = False
+
+CSRF_USE_SESSIONS = False
+SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
