@@ -71,18 +71,22 @@ def get_claude_response(request):
     
 # Return CSRF token to frontend
 def get_csrf_token(request):
-    token = get_token(request) #gets and sets the cookie
-    print(f"Generated CSRF token: {token}") 
-    print(f"Current cookies: {request.COOKIES}")
-    response = JsonResponse({"csrfToken": token})
+    new_token = get_token(request) 
 
-    if not request.COOKIES.get("csrftoken"):
+    existing_browser_token = request.COOKIES.get('csrftoken')
+    
+    response_token = existing_browser_token if existing_browser_token else new_token
+
+    response = JsonResponse({"csrfToken": response_token})
+
+    if not existing_browser_token:
         response.set_cookie(
             'csrftoken',
-            token,
+            new_token,
             samesite='None',
             secure=True,
-            httponly=False 
+            httponly=False,
+            max_age=31559600 
         )
-
+    
     return response

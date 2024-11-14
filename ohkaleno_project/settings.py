@@ -122,7 +122,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173', 
 ]
 
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFTOKEN']
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken', 'X-CSRFTOKEN']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://ohkaleno.netlify.app', 
