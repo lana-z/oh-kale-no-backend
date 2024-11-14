@@ -122,6 +122,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173', 
 ]
 
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFTOKEN']
+
 CSRF_TRUSTED_ORIGINS = [
     'https://ohkaleno.netlify.app', 
     'https://oh-kale-no-backend.onrender.com',
@@ -138,7 +140,7 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 
 CSRF_COOKIE_NAME = 'csrftoken'  
-CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN' 
+CSRF_HEADER_NAME = 'X-CSRFTOKEN' 
 CSRF_COOKIE_HTTPONLY = False
 
 CSRF_COOKIE_PATH = '/'
