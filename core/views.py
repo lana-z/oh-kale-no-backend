@@ -73,9 +73,9 @@ def get_claude_response(request):
     if request.method == "OPTIONS":
         print("Handling OPTIONS request")
         response = JsonResponse({})
-        response["Access-Control-Allow-Origin"] = "http://localhost:5173"
+        response["Access-Control-Allow-Origin"] = "https://ohkaleno.netlify.app"
         response["Access-Control-Allow-Credentials"] = "true"
-        response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         response["Access-Control-Allow-Headers"] = "X-CSRFTOKEN, Content-Type, X-Requested-With"
         print(f"OPTIONS response headers: {dict(response.headers)}")
         return response
