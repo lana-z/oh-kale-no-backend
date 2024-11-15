@@ -51,7 +51,7 @@ def get_csrf_token(request):
         max_age=31449600
     )
 
-    response["Access-Control-Allow-Origin"] = "http://localhost:5173"
+    response["Access-Control-Allow-Origin"] = "http://ohkaleno.netlify.app"
     response["Access-Control-Allow-Credentials"] = "true"
     response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
