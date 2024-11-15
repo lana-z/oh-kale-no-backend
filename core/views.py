@@ -11,13 +11,19 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
-
 @ensure_csrf_cookie
 def get_csrf_token(request):
     print("=== CSRF Token Request ===")
     token = get_token(request)
+
     response = JsonResponse({"csrfToken": token})
-    response.set_cookie('csrftoken', token, samesite='None', secure=True)
+    response.set_cookie(
+        'csrftoken', 
+        token, 
+        samesite='None', 
+        secure=True, 
+        domain='.netlify.app', 
+        path='/')
     
     print(f"Response headers: {dict(response.headers)}")
     return response
@@ -26,7 +32,7 @@ def get_csrf_token(request):
 @require_http_methods(["POST"])
 def get_claude_response(request):
     print("\n=== Claude Response Request ===")
-    
+
     try:
         body = json.loads(request.body)
         user_prompt = body.get("userPrompt", "")
