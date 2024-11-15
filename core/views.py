@@ -4,8 +4,12 @@ from django.http import JsonResponse
 from dotenv import load_dotenv
 from django.views.decorators.http import require_POST
 import json
-from django.http import JsonResponse
+from django.http import HttpResponse
 from django.middleware.csrf import get_token
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
+from django.views.decorators.http import require_http_methods
 
 load_dotenv()
 
@@ -13,13 +17,88 @@ ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
-@require_POST
+def test_view(request):
+    print("\nDEBUG: test_view was called")
+    return HttpResponse("Test view works")
+
+@require_http_methods(["GET", "OPTIONS"])
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    if request.method == "OPTIONS":
+        response = JsonResponse({})
+    else:
+        print("\nDEBUG: get_csrf_token view was called") 
+        print("=== CSRF Token Request ===")
+    
+    existing_token = request.COOKIES.get('csrftoken')
+    print(f"1. Existing token in request cookies: {existing_token}")
+    
+    if existing_token:
+        token = existing_token
+        print(f"2. Use existing token: {token}")
+    else:
+        token = get_token(request)
+        print(f"2. Generated new token: {token}")
+
+    response = JsonResponse({"csrfToken": token})
+
+    response.set_cookie(
+        'csrftoken',
+        token,
+        samesite='None', 
+        secure=True,
+        httponly=False, 
+        max_age=31449600
+    )
+
+    response["Access-Control-Allow-Origin"] = "http://localhost:5173"
+    response["Access-Control-Allow-Credentials"] = "true"
+    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
+    
+    
+    print(f"3. Cookie token set/confirmed: {token}")
+    print(f"4. Response headers: {dict(response.headers)}")
+    print("=== End CSRF Token Request ===\n")
+    
+    return response
+
+
+@require_http_methods(["POST", "OPTIONS"])
+@csrf_protect
 def get_claude_response(request):
+    print("\n=== Claude Response Request ===")
+    print(f"Request Method: {request.method}")
+    
+    if request.method == "OPTIONS":
+        print("Handling OPTIONS request")
+        response = JsonResponse({})
+        response["Access-Control-Allow-Origin"] = "http://localhost:5173"
+        response["Access-Control-Allow-Credentials"] = "true"
+        response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response["Access-Control-Allow-Headers"] = "X-CSRFTOKEN, Content-Type, X-Requested-With"
+        print(f"OPTIONS response headers: {dict(response.headers)}")
+        return response
+
+    print("\nPOST Request Details:")
+    print(f"1. CSRF Cookie: {request.COOKIES.get('csrftoken')}")
+    print(f"2a. X-CSRFTOKEN Header: {request.headers.get('X-CSRFTOKEN')}")
+    print(f"2b. X-CSRFToken Header: {request.headers.get('X-CSRFToken')}")
+    print(f"2c. x-csrftoken Header: {request.headers.get('x-csrftoken')}")
+    print(f"3. All Headers: {dict(request.headers)}")
+    print(f"4. Request META CSRF: {request.META.get('HTTP_X_CSRFTOKEN')}")
+    print(f"5. All Cookies: {request.COOKIES}")
+    
     try:
         body = json.loads(request.body)
         user_prompt = body.get("userPrompt", "")
+        
+        # response = JsonResponse({
+        #     "message": f"Received user prompt: {user_prompt}"
+        # })
 
-        # provided by Get Code button in Anthropic Workbench
+
+        # Provided by Get Code button in Anthropic Workbench
         response = client.messages.create(
             model="claude-3-5-sonnet-20241022",
             max_tokens=1000,
@@ -61,32 +140,17 @@ def get_claude_response(request):
             message_text = "No valid content received from Claude."
 
         # Return the message in a JSON-serializable format
-        return JsonResponse({"message": message_text})
-
+        response = JsonResponse({"message": message_text})
+        response["Access-Control-Allow-Origin"] = "http://localhost:5173"
+        response["Access-Control-Allow-Credentials"] = "true"
+        return response
+        
     except Exception as e:
-        return JsonResponse({
+        print(f"Error in get_claude_response: {str(e)}")
+        response = JsonResponse({
             "error": str(e),
-            "message": "Sorry, there seems to be a veggie jam in my Ninja. Please try again later. I'll be back agreen smoothie in no thyme."
+            "message": "Sorry, there seems to be a veggie jam in my Ninja. Please try again later."
         })
-    
-# Return CSRF token to frontend
-def get_csrf_token(request):
-    new_token = get_token(request) 
-
-    existing_browser_token = request.COOKIES.get('csrftoken')
-    
-    response_token = existing_browser_token if existing_browser_token else new_token
-
-    response = JsonResponse({"csrfToken": response_token})
-
-    if not existing_browser_token:
-        response.set_cookie(
-            'csrftoken',
-            new_token,
-            samesite='None',
-            secure=True,
-            httponly=False,
-            max_age=31559600 
-        )
-    
-    return response
+        response["Access-Control-Allow-Origin"] = "http://localhost:5173"
+        response["Access-Control-Allow-Credentials"] = "true"
+        return response

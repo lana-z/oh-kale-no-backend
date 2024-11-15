@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'corsheaders',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -122,7 +122,30 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173', 
 ]
 
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken', 'X-CSRFTOKEN']
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'X-CSRFToken',
+    'X-CSRFTOKEN',
+    'x-requested-with',
+]
+
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://ohkaleno.netlify.app', 
@@ -140,7 +163,9 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 
 CSRF_COOKIE_NAME = 'csrftoken'  
-CSRF_HEADER_NAME = 'X-CSRFTOKEN' 
+CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
 CSRF_COOKIE_HTTPONLY = False
 
 CSRF_COOKIE_PATH = '/'
+
+CSRF_COOKIE_DOMAIN = None
