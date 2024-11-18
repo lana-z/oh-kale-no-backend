@@ -21,9 +21,21 @@ def get_csrf_token(request):
         'csrftoken', 
         token, 
         samesite='None', 
-        secure=True, 
-        domain='.netlify.app', 
-        path='/')
+        secure=True,
+        httponly=False, 
+        max_age=31449600
+    )
+
+    response["Access-Control-Allow-Origin"] = "https://ohkaleno.netlify.app"
+    response["Access-Control-Allow-Credentials"] = "true"
+    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
+    
+    
+    print(f"3. Cookie token set/confirmed: {token}")
+    print(f"4. Response headers: {dict(response.headers)}")
+    print("=== End CSRF Token Request ===\n")
+
     
     print(f"Response headers: {dict(response.headers)}")
     return response
