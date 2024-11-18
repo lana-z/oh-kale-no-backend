@@ -151,6 +151,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://ohkaleno.netlify.app', 
     'https://oh-kale-no-backend.onrender.com',
     'http://localhost:5173',
+    'http://localhost:8000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
