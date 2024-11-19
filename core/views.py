@@ -14,6 +14,10 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 def get_csrf_token(request):
     print("=== CSRF Token Request ===")
     token = get_token(request)
+
+    origin = request.headers.get('Origin')
+    print(f"Origin header: {origin}")
+
     print(f"Generated CSRF token: {token}")
 
     response = JsonResponse({}) 
@@ -31,7 +35,13 @@ def get_csrf_token(request):
     print(f"Cookie for domain: {request.get_host()}")
 
 
-    response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
+    if origin in ['https://ohkaleno.xyz', 'https://www.ohkaleno.xyz']:
+        response["Access-Control-Allow-Origin"] = origin
+        print(f"Matched allowed origin: {origin}")
+    else:
+        response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
+        print(f"Unexpected origin received: {origin}")
+    # response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
     response["Access-Control-Allow-Credentials"] = "true"
     response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
@@ -53,7 +63,17 @@ def get_claude_response(request):
     if request.method == "OPTIONS":
         print("*** Handling OPTIONS request ***")
         response = JsonResponse({})
-        response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
+
+        origin = request.headers.get('Origin')
+        print(f"Origin header: {origin}")
+
+        if origin in ['https://ohkaleno.xyz', 'https://www.ohkaleno.xyz']:
+            response["Access-Control-Allow-Origin"] = origin
+            print(f"Matched allowed origin: {origin}")
+        else:
+            response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
+            print(f"Unexpected origin received: {origin}")
+        #  response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
         response["Access-Control-Allow-Credentials"] = "true"
         response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         response["Access-Control-Allow-Headers"] = "X-CSRFTOKEN, Content-Type, X-Requested-With"
