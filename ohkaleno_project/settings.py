@@ -11,7 +11,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['oh-kale-no.vercel.app', 'oh-kale-no-backend.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'oh-kale-no.vercel.app', 
+    'oh-kale-no-backend.onrender.com', 
+    'localhost', '127.0.0.1', 
+    'ohkaleno.xyz', 
+    'www.ohkaleno.xyz'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -22,7 +28,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'corsheaders',
-
 ]
 
 MIDDLEWARE = [
@@ -120,6 +125,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     'https://oh-kale-no.vercel.app', 
     'http://localhost:5173',
+    "https://ohkaleno.xyz",
+    "https://www.ohkaleno.xyz",
 ]
 
 CORS_ALLOW_METHODS = [
@@ -152,6 +159,8 @@ CSRF_TRUSTED_ORIGINS = [
     'https://oh-kale-no-backend.onrender.com',
     'http://localhost:5173',
     'http://localhost:8000',
+    "https://ohkaleno.xyz",
+    "https://www.ohkaleno.xyz",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
