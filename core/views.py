@@ -28,10 +28,10 @@ def get_csrf_token(request):
     
     print(f"Token in response body: {token}")
     print(f"Token set in cookie: {response.cookies['csrftoken'].value}")
-    print(f"Cookie for domain: {request.get_host()} with path: /")
+    print(f"Cookie for domain: {request.get_host()}")
 
 
-    response["Access-Control-Allow-Origin"] = "http://oh-kale-no.vercel.app"
+    response["Access-Control-Allow-Origin"] = "https://oh-kale-no.vercel.app"
     response["Access-Control-Allow-Credentials"] = "true"
     response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
