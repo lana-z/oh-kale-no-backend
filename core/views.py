@@ -51,7 +51,7 @@ def get_csrf_token(request):
         max_age=31449600
     )
 
-    response["Access-Control-Allow-Origin"] = "http://ohkaleno.netlify.app"
+    response["Access-Control-Allow-Origin"] = "http://oh-kale-no.vercel.app"
     response["Access-Control-Allow-Credentials"] = "true"
     response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
     response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
@@ -73,7 +73,7 @@ def get_claude_response(request):
     if request.method == "OPTIONS":
         print("Handling OPTIONS request")
         response = JsonResponse({})
-        response["Access-Control-Allow-Origin"] = "https://ohkaleno.netlify.app"
+        response["Access-Control-Allow-Origin"] = "https://oh-kale-no.vercel.app"
         response["Access-Control-Allow-Credentials"] = "true"
         response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         response["Access-Control-Allow-Headers"] = "X-CSRFTOKEN, Content-Type, X-Requested-With"
