@@ -15,8 +15,9 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 def get_csrf_token(request):
     print("=== CSRF Token Request ===")
     token = get_token(request)
+    print(f"Generated CSRF token: {token}")
 
-    response = JsonResponse({"csrfToken": token})
+    response = JsonResponse({}) 
     response.set_cookie(
         'csrftoken', 
         token, 
@@ -25,6 +26,10 @@ def get_csrf_token(request):
         httponly=False, 
         max_age=31449600
     )
+    
+    print(f"Token in response body: {token}")
+    print(f"Token set in cookie: {response.cookies['csrftoken'].value}")
+    print(f"Cookie for domain: {request.get_host()} with path: /")
 
 
     response["Access-Control-Allow-Origin"] = "http://oh-kale-no.vercel.app"
@@ -33,23 +38,21 @@ def get_csrf_token(request):
     response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
     
     
-    print(f"3. Cookie token set/confirmed: {token}")
-    print(f"4. Response headers: {dict(response.headers)}")
+    print(f"Cookie token set/confirmed: {token}")
+    print(f"Response headers: {dict(response.headers)}")
     print("=== End CSRF Token Request ===\n")
 
-    
-    print(f"Response headers: {dict(response.headers)}")
     return response
 
 @csrf_protect
-@require_http_methods(["POST"])
+@require_http_methods(["POST", "OPTIONS"])
 def get_claude_response(request):
     print("\n=== Claude Response Request ===")
 
     print(f"Request Method: {request.method}")
     
     if request.method == "OPTIONS":
-        print("Handling OPTIONS request")
+        print("*** Handling OPTIONS request ***")
         response = JsonResponse({})
         response["Access-Control-Allow-Origin"] = "https://oh-kale-no.vercel.app"
         response["Access-Control-Allow-Credentials"] = "true"
