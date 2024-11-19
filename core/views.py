@@ -1,9 +1,8 @@
 import os
 import anthropic
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
 from django.middleware.csrf import get_token
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.views.decorators.http import require_http_methods
 
