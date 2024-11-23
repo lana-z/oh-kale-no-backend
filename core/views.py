@@ -12,53 +12,41 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    print("=== CSRF Token Request ===")
+    print("\n=== CSRF Token Request ===")
+    print(f"Origin header: {request.headers.get('Origin')}")
+    print(f"Cookie token: {request.COOKIES.get('csrftoken')}")
+    print(f"CSRF Token in header: {request.headers.get('X-CSRFToken')}")
+    
     token = get_token(request)
+    response = JsonResponse({})
 
+    # Set the same token in both cookie and header
+    response['X-CSRFToken'] = token
+    
+    # Handle CORS headers
     origin = request.headers.get('Origin')
-    print(f"Origin header: {origin}")
-
-    print(f"Generated CSRF token: {token}")
-
-    response = JsonResponse({}) 
-    response.set_cookie(
-        'csrftoken', 
-        token, 
-        samesite='None', 
-        secure=True,
-        httponly=False, 
-        max_age=31449600
-    )
-    
-    print(f"Token in response body: {token}")
-    print(f"Token set in cookie: {response.cookies['csrftoken'].value}")
-    print(f"Cookie for domain: {request.get_host()}")
-
-
-    if origin in ['https://ohkaleno.xyz', 'https://www.ohkaleno.xyz']:
+    if origin:
         response["Access-Control-Allow-Origin"] = origin
-        print(f"Matched allowed origin: {origin}")
-    else:
-        response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
-        print(f"Unexpected origin received: {origin}")
-    # response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
-    response["Access-Control-Allow-Credentials"] = "true"
-    response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-    response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
+        response["Access-Control-Allow-Credentials"] = "true"
+        response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
+        response["Access-Control-Expose-Headers"] = "Content-Type, X-CSRFToken"
     
-    
-    print(f"Cookie token set/confirmed: {token}")
-    print(f"Response headers: {dict(response.headers)}")
     print("=== End CSRF Token Request ===\n")
-
     return response
 
 @csrf_protect
 @require_http_methods(["POST", "OPTIONS"])
 def get_claude_response(request):
     print("\n=== Claude Response Request ===")
-
-    print(f"Request Method: {request.method}")
+    print(f"Request method: {request.method}")
+    print(f"All headers: {dict(request.headers)}")
+    print(f"All cookies: {request.COOKIES}")
+    print(f"CSRF Token in header: {request.headers.get('X-CSRFToken')}")
+    print(f"CSRF Token in cookie: {request.COOKIES.get('csrftoken')}")
+    print(f"CSRF Token in META: {request.META.get('HTTP_X_CSRFTOKEN')}")
+    print(f"Content type: {request.headers.get('Content-Type')}")
+    print("=== End Claude Response Request ===\n")
     
     if request.method == "OPTIONS":
         print("*** Handling OPTIONS request ***")
@@ -67,22 +55,21 @@ def get_claude_response(request):
         origin = request.headers.get('Origin')
         print(f"Origin header: {origin}")
 
-        if origin in ['https://ohkaleno.xyz', 'https://www.ohkaleno.xyz']:
+        if origin:
             response["Access-Control-Allow-Origin"] = origin
             print(f"Matched allowed origin: {origin}")
         else:
-            response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
-            print(f"Unexpected origin received: {origin}")
-        #  response["Access-Control-Allow-Origin"] = "https://ohkaleno.xyz"
+            response["Access-Control-Allow-Origin"] = "http://localhost:5173"
         response["Access-Control-Allow-Credentials"] = "true"
         response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-        response["Access-Control-Allow-Headers"] = "X-CSRFTOKEN, Content-Type, X-Requested-With"
+        response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
         print(f"OPTIONS response headers: {dict(response.headers)}")
         return response
 
     try:
         body = json.loads(request.body)
         user_prompt = body.get("userPrompt", "")
+        print(f"Received prompt: {user_prompt}")
 
         # Provided by Get Code button in Anthropic Workbench
         response = client.messages.create(
