@@ -121,23 +121,21 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Production Settings
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_DOMAIN = ".onrender.com" 
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
 
 CORS_ALLOWED_ORIGINS = [
-    'https://oh-kale-no.vercel.app', 
-    'http://localhost:5173',
-    "https://ohkaleno.xyz",
-    "https://www.ohkaleno.xyz",
+    'https://ohkaleno.xyz',
+    'https://www.ohkaleno.xyz',
+    'https://oh-kale-no.vercel.app'
 ]
 
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = ['GET', 'POST', 'OPTIONS']
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -147,37 +145,17 @@ CORS_ALLOW_HEADERS = [
     'origin',
     'user-agent',
     'x-csrftoken',
-    'X-CSRFToken',
-    'X-CSRFTOKEN',
     'x-requested-with',
 ]
 
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://oh-kale-no.vercel.app', 
-    'https://oh-kale-no-backend.onrender.com',
-    'http://localhost:5173',
-    'http://localhost:8000',
-    "https://ohkaleno.xyz",
-    "https://www.ohkaleno.xyz",
+    'https://ohkaleno.xyz',
+    'https://www.ohkaleno.xyz',
+    'https://oh-kale-no.vercel.app',
+    'https://oh-kale-no-backend.onrender.com'
 ]
-
-CORS_ALLOW_CREDENTIALS = True
-
-# Local Development Settings
-# CSRF_COOKIE_SECURE = False
-# CSRF_COOKIE_DOMAIN = 'localhost' 
-# SESSION_COOKIE_SECURE = False
-# CSRF_COOKIE_SAMESITE = 'Lax'
-# SESSION_COOKIE_SAMESITE = 'Lax'
-
-# Production Settings
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_DOMAIN = ".ohkaleno.xyz"
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SAMESITE = 'None'
 
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
@@ -188,3 +166,10 @@ CSRF_COOKIE_PATH = '/'
 # Debug settings for CSRF
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 CSRF_TOKEN_LENGTH = 32
+
+# Local Development Settings
+# CSRF_COOKIE_SECURE = False
+# CSRF_COOKIE_DOMAIN = 'localhost' 
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SAMESITE = 'Lax'
+# SESSION_COOKIE_SAMESITE = 'Lax'
