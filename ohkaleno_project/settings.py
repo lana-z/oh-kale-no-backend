@@ -123,7 +123,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Production Settings
 CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_DOMAIN = ".onrender.com" 
+CSRF_COOKIE_DOMAIN = None  
+CSRF_COOKIE_HTTPONLY = False  
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
@@ -148,7 +149,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+CORS_EXPOSE_HEADERS = ['X-CSRFToken']  # Allow frontend to read CSRF token header
 
 CSRF_TRUSTED_ORIGINS = [
     'https://ohkaleno.xyz',
@@ -160,7 +161,6 @@ CSRF_TRUSTED_ORIGINS = [
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
-CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_PATH = '/'
 
 # Debug settings for CSRF
