@@ -18,7 +18,7 @@ def get_csrf_token(request):
     print(f"CSRF Token in header: {request.headers.get('X-CSRFToken')}")
     
     token = get_token(request)
-    response = JsonResponse({})
+    response = JsonResponse({'csrfToken': token})  # Include token in response for debugging
     
     # Handle CORS headers
     origin = request.headers.get('Origin')
@@ -27,7 +27,9 @@ def get_csrf_token(request):
         response["Access-Control-Allow-Credentials"] = "true"
         response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
+        response["Access-Control-Expose-Headers"] = "X-CSRFToken"
     
+    print(f"Response cookies: {response.cookies}")
     print("=== End CSRF Token Request ===\n")
     return response
 

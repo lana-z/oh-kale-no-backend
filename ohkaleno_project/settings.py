@@ -123,7 +123,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Production Settings
 CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_DOMAIN = None  
+CSRF_COOKIE_DOMAIN = "oh-kale-no-backend.onrender.com"  # Explicit domain for cookie
 CSRF_COOKIE_HTTPONLY = False  
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
