@@ -123,7 +123,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Production Settings
 CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_DOMAIN = "oh-kale-no-backend.onrender.com"  # Explicit domain for cookie
+CSRF_COOKIE_DOMAIN = None  # Allow the cookie to be sent cross-domain
 CSRF_COOKIE_HTTPONLY = False  
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
@@ -132,8 +132,12 @@ SESSION_COOKIE_SAMESITE = 'None'
 CORS_ALLOWED_ORIGINS = [
     'https://ohkaleno.xyz',
     'https://www.ohkaleno.xyz',
-    'https://oh-kale-no.vercel.app'
+    'http://localhost:5173'
 ]
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_PREFLIGHT_MAX_AGE = 86400
+CORS_REPLACE_HTTPS_REFERER = True
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ['GET', 'POST', 'OPTIONS']
@@ -147,6 +151,9 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+    'access-control-allow-origin',
+    'access-control-allow-headers',
+    'access-control-allow-methods',
 ]
 
 CORS_EXPOSE_HEADERS = ['X-CSRFToken']  # Allow frontend to read CSRF token header
@@ -154,8 +161,7 @@ CORS_EXPOSE_HEADERS = ['X-CSRFToken']  # Allow frontend to read CSRF token heade
 CSRF_TRUSTED_ORIGINS = [
     'https://ohkaleno.xyz',
     'https://www.ohkaleno.xyz',
-    'https://oh-kale-no.vercel.app',
-    'https://oh-kale-no-backend.onrender.com'
+    'http://localhost:5173'
 ]
 
 CSRF_USE_SESSIONS = False
