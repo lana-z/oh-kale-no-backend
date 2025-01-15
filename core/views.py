@@ -12,13 +12,8 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    print("\n=== CSRF Token Request ===")
-    print(f"Origin header: {request.headers.get('Origin')}")
-    print(f"Cookie token: {request.COOKIES.get('csrftoken')}")
-    print(f"CSRF Token in header: {request.headers.get('X-CSRFToken')}")
-    
     token = get_token(request)
-    response = JsonResponse({'csrfToken': token})  # Include token in response for debugging
+    response = JsonResponse({'csrfToken': token})
     
     # Handle CORS headers
     origin = request.headers.get('Origin')
@@ -29,8 +24,6 @@ def get_csrf_token(request):
         response["Access-Control-Allow-Headers"] = "X-CSRFToken, Content-Type, X-Requested-With"
         response["Access-Control-Expose-Headers"] = "X-CSRFToken"
     
-    print(f"Response cookies: {response.cookies}")
-    print("=== End CSRF Token Request ===\n")
     return response
 
 @csrf_protect
