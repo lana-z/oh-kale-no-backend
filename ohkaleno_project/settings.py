@@ -12,11 +12,16 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    'oh-kale-no.vercel.app', 
-    'oh-kale-no-backend.onrender.com', 
-    'localhost', '127.0.0.1', 
-    'ohkaleno.xyz', 
-    'www.ohkaleno.xyz'
+    # Production domains
+    'oh-kale-no.vercel.app',
+    'oh-kale-no-backend.onrender.com',
+    'ohkaleno.xyz',
+    'www.ohkaleno.xyz',
+    # Local development
+    'localhost',
+    '127.0.0.1',
+    '192.168.1.41',
+    '0.0.0.0'
 ]
 
 INSTALLED_APPS = [
@@ -79,8 +84,7 @@ DATABASES = {
         }
     }
 }
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref//#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -97,10 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -110,36 +110,58 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref//#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Production Settings
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_DOMAIN = None  # Allow the cookie to be sent cross-domain
-CSRF_COOKIE_HTTPONLY = False  
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SAMESITE = 'None'
-
 CORS_ALLOWED_ORIGINS = [
+    # Production
+    'https://oh-kale-no.vercel.app',
+    'https://ohkaleno.xyz',
+    'https://www.ohkaleno.xyz',
+    # Local development
     'http://localhost:5173',
     'http://localhost:5174',
-    'https://ohkaleno.xyz',
-    'https://www.ohkaleno.xyz'
+    'http://127.0.0.1:5173',
+    'http://192.168.1.41:5173'
 ]
 
-CORS_PREFLIGHT_MAX_AGE = 3600
+CSRF_TRUSTED_ORIGINS = [
+    # Production
+    'https://oh-kale-no.vercel.app',
+    'https://ohkaleno.xyz',
+    'https://www.ohkaleno.xyz',
+    # Local development
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://127.0.0.1:5173',
+    'http://192.168.1.41:5173'
+]
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_METHODS = ['GET', 'POST', 'OPTIONS']
+
+# Security settings - Production
+if not DEBUG:
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+else:
+    # Local development settings
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+
+# Common settings for both environments
+CSRF_COOKIE_DOMAIN = None
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
+
+# CORS Settings
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -150,34 +172,19 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    'access-control-allow-origin',
-    'access-control-allow-headers',
-    'access-control-allow-methods',
-    'sec-ch-ua-mobile',
-    'sec-ch-ua-platform'
 ]
 
-CORS_EXPOSE_HEADERS = ['x-csrftoken']  # Allow frontend to read CSRF token header
+CORS_PREFLIGHT_MAX_AGE = 3600
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://ohkaleno.xyz',
-    'https://www.ohkaleno.xyz'
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
 ]
-
-CSRF_USE_SESSIONS = False
-CSRF_COOKIE_NAME = 'csrftoken'
-CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
-CSRF_COOKIE_PATH = '/'
 
 # Debug settings for CSRF
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 CSRF_TOKEN_LENGTH = 32
-
-# Local Development Settings
-# CSRF_COOKIE_SECURE = False
-# CSRF_COOKIE_DOMAIN = 'localhost' 
-# SESSION_COOKIE_SECURE = False
-# CSRF_COOKIE_SAMESITE = 'Lax'
-# SESSION_COOKIE_SAMESITE = 'Lax'

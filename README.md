@@ -1,13 +1,13 @@
 # Oh Kale No Backend
 
-Django backend for Oh Kale No, a wellness application that encourages healthy choices through playful, vegetable-themed interactions.
+Django backend for Oh Kale No, a playful web app designed to encourage healthy choices in challenging times with veggie-themed puns.
 
 ## Tech Stack
 
 - Django REST Framework
 - PostgreSQL (via Neon DB)
 - Anthropic's Claude 3 Sonnet for AI responses
-- Python 3.11+
+- Python 3.13
 - Deployed on Render
 
 ## API Endpoints
@@ -71,10 +71,10 @@ The API will be available at `http://localhost:8000`
 The application is deployed on Render with the following configuration:
 - Build Command: `pip install -r requirements.txt`
 - Start Command: `gunicorn ohkaleno_project.wsgi:application`
-- Environment: Python 3.11
+- Environment: Python 3.13
 - Database: Neon PostgreSQL
 
-## Related Repositories
+## Links
 
 - Frontend: [oh-kale-no](https://github.com/lana-z/oh-kale-no)
 
@@ -87,5 +87,4 @@ The application is deployed on Render with the following configuration:
 5. Submit a pull request
 
 ## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
