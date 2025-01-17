@@ -130,14 +130,13 @@ CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 
 CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'http://localhost:5174',
     'https://ohkaleno.xyz',
-    'https://www.ohkaleno.xyz',
-    'http://localhost:5173'
+    'https://www.ohkaleno.xyz'
 ]
 
-CORS_ORIGIN_ALLOW_ALL = False
-CORS_PREFLIGHT_MAX_AGE = 86400
-CORS_REPLACE_HTTPS_REFERER = True
+CORS_PREFLIGHT_MAX_AGE = 3600
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ['GET', 'POST', 'OPTIONS']
@@ -154,14 +153,17 @@ CORS_ALLOW_HEADERS = [
     'access-control-allow-origin',
     'access-control-allow-headers',
     'access-control-allow-methods',
+    'sec-ch-ua-mobile',
+    'sec-ch-ua-platform'
 ]
 
-CORS_EXPOSE_HEADERS = ['X-CSRFToken']  # Allow frontend to read CSRF token header
+CORS_EXPOSE_HEADERS = ['x-csrftoken']  # Allow frontend to read CSRF token header
 
 CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:5173',
+    'http://localhost:5174',
     'https://ohkaleno.xyz',
-    'https://www.ohkaleno.xyz',
-    'http://localhost:5173'
+    'https://www.ohkaleno.xyz'
 ]
 
 CSRF_USE_SESSIONS = False
