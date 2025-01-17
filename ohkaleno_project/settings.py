@@ -153,9 +153,9 @@ else:
 
 # Common settings for both environments
 CSRF_COOKIE_DOMAIN = None
-CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False  
+CSRF_COOKIE_SAMESITE = 'None'  # Changed from 'Lax' to support Safari mobile
+SESSION_COOKIE_SAMESITE = 'None'  # Changed from 'Lax' to support Safari mobile
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
@@ -188,3 +188,5 @@ CORS_ALLOW_METHODS = [
 # Debug settings for CSRF
 CSRF_FAILURE_VIEW = 'django.views.csrf.csrf_failure'
 CSRF_TOKEN_LENGTH = 32
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
