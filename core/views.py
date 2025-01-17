@@ -1,4 +1,5 @@
 import os
+import json
 import anthropic
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
@@ -16,7 +17,9 @@ def get_csrf_token(request):
 @require_http_methods(["POST"])
 def get_claude_response(request):
     try:
-        user_input = request.POST.get('user_input', '')
+        data = json.loads(request.body)
+        user_input = data.get('user_input', '')
+        
         client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
         
         message = client.messages.create(
@@ -30,6 +33,10 @@ def get_claude_response(request):
         return JsonResponse({
             'message': message.content[0].text
         })
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'message': "Invalid request format"
+        }, status=400)
     except Exception:
         return JsonResponse({
             'message': "Let's take a fresh approach - like a crisp lettuce leaf!"
